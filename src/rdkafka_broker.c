@@ -3932,6 +3932,9 @@ rd_kafka_fetch_reply_handle (rd_kafka_broker_t *rkb,
                                 }
                                 break;
 				case RD_KAFKA_RESP_ERR__PARTITION_EOF:
+					if (!rkb->rkb_rk->rk_conf.enable_partition_eof)
+						break;
+					/* FALLTHRU */
 				case RD_KAFKA_RESP_ERR_MSG_SIZE_TOO_LARGE:
 				default: /* and all other errors */
 					rko = rd_kafka_op_new(RD_KAFKA_OP_CONSUMER_ERR);
