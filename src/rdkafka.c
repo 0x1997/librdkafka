@@ -1091,6 +1091,10 @@ rd_kafka_t *rd_kafka_new (rd_kafka_type_t type, rd_kafka_conf_t *conf,
         rk->rk_conf.queued_max_msg_bytes =
                 (int64_t)rk->rk_conf.queued_max_msg_kbytes * 1000ll;
 
+	/* Enable api.version.request=true if fallback.broker.version
+	 * indicates a supporting broker. */
+	if (rd_kafka_ApiVersion_is_queryable(rk->rk_conf.broker_version_fallback))
+		rk->rk_conf.api_version_request = 1;
 
         if (rd_kafka_assignors_init(rk, errstr, errstr_size) == -1) {
 		rd_kafka_destroy_internal(rk);
